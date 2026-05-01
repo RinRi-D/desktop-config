@@ -1,0 +1,115 @@
+---
+- name: Configure Fedora workstation
+  hosts: localhost
+  connection: local
+  become: true
+
+  vars:
+    primary_user: "{{ ansible_facts.user_id }}"
+
+    workstation_packages:
+      - git
+      - neovim
+      - emacs
+      - cmus
+      - golang
+      - zsh
+      - docker-cli
+      - sway
+      - swaybg
+      - waybar
+      - wofi
+      - foot
+      - xdg-desktop-portal
+      - xdg-desktop-portal-wlr
+      - xdg-desktop-portal-gtk
+      - polkit
+      - lxqt-policykit
+      - wl-clipboard
+      - grim
+      - slurp
+      - swaylock
+      - swayidle
+      - mako
+      - xdg-user-dirs
+      - make
+      - flatpak
+
+  tasks:
+    - name: Get Fedora release number
+      ansible.builtin.command: rpm -E %fedora
+      register: fedora_release_result
+      changed_when: false
+
+    - name: Set Fedora release fact
+      ansible.builtin.set_fact:
+        fedora_release: "{{ fedora_release_result.stdout | trim }}"
+
+    - name: Install dnf config-manager plugin
+      ansible.builtin.dnf:
+        name: dnf-plugins-core
+        state: present
+
+    - name: Install RPM Fusion free release package
+      ansible.builtin.command: >
+        dnf -y install
+        https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm
+      args:
+        creates: /etc/yum.repos.d/rpmfusion-free.repo
+
+    - name: Install RPM Fusion nonfree release package
+      ansible.builtin.command: >
+        dnf -y install
+        https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm
+      args:
+        creates: /etc/yum.repos.d/rpmfusion-nonfree.repo
+
+    - name: Enable Fedora Cisco OpenH264 repository
+      ansible.builtin.command: dnf config-manager setopt fedora-cisco-openh264.enabled=1
+      changed_when: false
+
+    - name: Refresh DNF metadata
+      ansible.builtin.command: dnf makecache
+      changed_when: false
+
+    - name: Update all installed packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Install Fedora packages
+      ansible.builtin.dnf:
+        name: "{{ workstation_packages }}"
+        state: present
+
+    - name: Ensure Flatpak is installed
+      ansible.builtin.dnf:
+        name: flatpak
+        state: present
+
+    - name: Add Flathub remote
+      ansible.builtin.command: >
+        flatpak remote-add --if-not-exists flathub
+        https://flathub.org/repo/flathub.flatpakrepo
+      changed_when: false
+
+    - name: Check whether Telegram Desktop is installed
+      ansible.builtin.command: flatpak info org.telegram.desktop
+      register: telegram_flatpak
+      changed_when: false
+      failed_when: false
+
+    - name: Install Telegram Desktop from Flathub
+      ansible.builtin.command: flatpak install -y flathub org.telegram.desktop
+      when: telegram_flatpak.rc != 0
+
+    - name: Get zsh path
+      ansible.builtin.command: which zsh
+      register: zsh_path
+      changed_when: false
+
+    - name: Set primary user's shell to zsh
+      ansible.builtin.user:
+        name: "{{ primary_user }}"
+        shell: "{{ zsh_path.stdout }}"
