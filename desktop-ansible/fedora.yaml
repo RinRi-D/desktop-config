@@ -138,15 +138,15 @@
         group: "{{ primary_user }}"
         mode: "0755"
 
-    - name: Download DejaVuSansMono Nerd Font 3.4.0
+    - name: Download JetBrainsMono Nerd Font 3.4.0
       ansible.builtin.get_url:
-        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DejaVuSansMono.zip"
-        dest: "/tmp/DejaVuSansMono.zip"
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
+        dest: "/tmp/JetBrainsMono.zip"
         mode: "0644"
 
-    - name: Unarchive DejaVuSansMono Nerd Font
+    - name: Unarchive JetBrainsMono Nerd Font
       ansible.builtin.unarchive:
-        src: "/tmp/DejaVuSansMono.zip"
+        src: "/tmp/JetBrainsMono.zip"
         dest: "/home/{{ primary_user }}/.local/share/fonts"
         remote_src: true
         owner: "{{ primary_user }}"
@@ -164,7 +164,7 @@
         group: "{{ primary_user }}"
         mode: "0755"
 
-    - name: Set default monospace font to DejaVuSansMono Nerd Font
+    - name: Set default monospace font to JetBrainsMono Nerd Font
       ansible.builtin.copy:
         dest: "/home/{{ primary_user }}/.config/fontconfig/fonts.conf"
         owner: "{{ primary_user }}"
@@ -179,7 +179,7 @@
                 <string>monospace</string>
               </test>
               <edit name="family" mode="assign" binding="strong">
-                <string>DejaVuSansM Nerd Font</string>
+                <string>JetBrainsMono Nerd Font</string>
               </edit>
             </match>
           </fontconfig>
