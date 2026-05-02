@@ -43,6 +43,13 @@
       - fcitx5-autostart
       - fcitx5-mozc
       - chezmoi
+      - obs-studio
+      - obs-studio-plugin-browser
+      - obs-studio-plugin-vaapi
+      - fzf
+      - easyeffects
+      - gcc
+      - gcc-c++
 
   tasks:
     - name: Get Fedora release number

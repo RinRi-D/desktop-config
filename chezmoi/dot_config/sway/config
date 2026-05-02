@@ -246,5 +246,6 @@ client.placeholder      #1D2021 #0C0C0C $fg     #000000   #0C0C0C
  
 exec fcitx5 -d
 exec 'sleep 3; swaymsg workspace 1'
+exec easyeffects -w
 
 include /etc/sway/config.d/*
