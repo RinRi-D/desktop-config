@@ -5,7 +5,7 @@
   become: true
 
   vars:
-    primary_user: "{{ ansible_facts.user_id }}"
+    primary_user: "rin"
 
     workstation_packages:
       - git
@@ -34,6 +34,15 @@
       - xdg-user-dirs
       - make
       - flatpak
+      - pavucontrol
+      - distrobox
+      - fcitx5
+      - fcitx5-gtk
+      - fcitx5-qt
+      - fcitx5-configtool
+      - fcitx5-autostart
+      - fcitx5-mozc
+      - chezmoi
 
   tasks:
     - name: Get Fedora release number
@@ -103,6 +112,16 @@
     - name: Install Telegram Desktop from Flathub
       ansible.builtin.command: flatpak install -y flathub org.telegram.desktop
       when: telegram_flatpak.rc != 0
+
+    - name: Check whether Discord is installed
+      ansible.builtin.command: flatpak info dev.vencord.Vesktop
+      register: discord_flatpak
+      changed_when: false
+      failed_when: false
+
+    - name: Install Discord from Flathub
+      ansible.builtin.command: flatpak install -y flathub dev.vencord.Vesktop
+      when: discord_flatpak.rc != 0
 
     - name: Get zsh path
       ansible.builtin.command: which zsh
