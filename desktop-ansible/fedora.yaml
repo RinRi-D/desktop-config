@@ -130,6 +130,60 @@
       ansible.builtin.command: flatpak install -y flathub dev.vencord.Vesktop
       when: discord_flatpak.rc != 0
 
+    - name: Create font directory for the primary user
+      ansible.builtin.file:
+        path: "/home/{{ primary_user }}/.local/share/fonts"
+        state: directory
+        owner: "{{ primary_user }}"
+        group: "{{ primary_user }}"
+        mode: "0755"
+
+    - name: Download DejaVuSansMono Nerd Font 3.4.0
+      ansible.builtin.get_url:
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/DejaVuSansMono.zip"
+        dest: "/tmp/DejaVuSansMono.zip"
+        mode: "0644"
+
+    - name: Unarchive DejaVuSansMono Nerd Font
+      ansible.builtin.unarchive:
+        src: "/tmp/DejaVuSansMono.zip"
+        dest: "/home/{{ primary_user }}/.local/share/fonts"
+        remote_src: true
+        owner: "{{ primary_user }}"
+        group: "{{ primary_user }}"
+
+    - name: Update font cache
+      ansible.builtin.command: fc-cache -fv
+      changed_when: false
+
+    - name: Ensure fontconfig config directory exists
+      ansible.builtin.file:
+        path: "/home/{{ primary_user }}/.config/fontconfig"
+        state: directory
+        owner: "{{ primary_user }}"
+        group: "{{ primary_user }}"
+        mode: "0755"
+
+    - name: Set default monospace font to DejaVuSansMono Nerd Font
+      ansible.builtin.copy:
+        dest: "/home/{{ primary_user }}/.config/fontconfig/fonts.conf"
+        owner: "{{ primary_user }}"
+        group: "{{ primary_user }}"
+        mode: "0644"
+        content: |
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+          <fontconfig>
+            <match target="pattern">
+              <test qual="any" name="family">
+                <string>monospace</string>
+              </test>
+              <edit name="family" mode="assign" binding="strong">
+                <string>DejaVuSansM Nerd Font</string>
+              </edit>
+            </match>
+          </fontconfig>
+
     - name: Get zsh path
       ansible.builtin.command: which zsh
       register: zsh_path
