@@ -1,0 +1,107 @@
+@define-color text-main #2a2a2a;
+@define-color pastel-pink #ffc5d3;
+@define-color pastel-red #ff746c;
+@define-color soft-green #6fc276;
+@define-color black #000000;
+
+* {
+    font-family: 'Noto Sans Mono', 'Font Awesome 6 Free', 'Font Awesome 6 Brands', monospace;
+    font-size: 15px;
+}
+
+window#waybar {
+    background-color: transparent;
+    border-bottom: 3px solid transparent;
+    color: #ffffff;
+    transition-property: background-color;
+    transition-duration: 1s;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+.modules-left {
+    margin-left: 10px;
+}
+
+.modules-right {
+    margin-right: 10px;
+}
+
+.modules-right, .modules-center, .modules-left {
+    margin-bottom: 10px;
+}
+
+#window {
+    padding: 0 10px;
+    color: @text-main;
+    background-color: @pastel-pink;
+    border-radius: 10px;
+}
+
+#waybar.empty #window {
+    background: none;
+}
+
+button {
+    /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
+    /* Avoid rounded borders under each button name */
+    border: none;
+}
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+button:hover {
+    background: inherit;
+}
+
+#workspaces button {
+    border-radius: 10px;
+    min-width: 25px;
+    min-height: 20px;
+    padding: 5px 5px;
+    margin-right: 10px;
+
+    background-color: @text-main;
+    color: @pastel-pink;
+    font-weight:bold;
+    box-shadow: rgba(0, 0, 0, 0.116) 2px 2px 5px 2px;
+}
+
+#workspaces button:hover {
+    background-color: inherit;
+}
+
+#workspaces button.focused, #workspaces button.active {
+    background-color: @pastel-pink;
+    color: @text-main;
+}
+
+#workspaces button.urgent {
+    background-color: @pastel-red;
+    color: @text-main;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#mpd {
+    padding: 0 10px;
+    color: @text-main;
+    background-color: @pastel-pink;
+    border-radius: 10px;
+}
