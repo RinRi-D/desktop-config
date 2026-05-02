@@ -1,6 +1,4 @@
 alias vim="nvim"
-export PATH="$PATH:$HOME/.local/bin"
-export EDITOR="nvim"
 
 # The following lines were added by compinstall
 

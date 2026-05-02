@@ -23,7 +23,6 @@ set $secondmonitor HDMI-A-2
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output $mainmonitor resolution 2560x1440 position 1920,0 scale 1.2
 output $secondmonitor resolution 1920x1080 position 0,0
 # You can get the names of your outputs by running: swaymsg -t get_outputs
@@ -43,6 +42,9 @@ workspace 7 output $mainmonitor
 workspace 8 output $secondmonitor
 workspace 9 output $secondmonitor
 workspace 10 output $secondmonitor
+
+assign [app_id="firefox"] workspace 3
+assign [app_id="telegram"] workspace 5
 
 ### Idle configuration
 #
@@ -206,6 +208,7 @@ bindsym $mod+r mode "resize"
     bindsym Print exec grim
     bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
     bindsym $mod+w exec $browser
+    bindsym $mod+Shift+t exec telegram
 
 bar {
     swaybar_command waybar
@@ -242,5 +245,6 @@ client.urgent           #2F343A #CC241D $fg_1   #CC241D   #CC241D
 client.placeholder      #1D2021 #0C0C0C $fg     #000000   #0C0C0C
  
 exec fcitx5 -d
+exec 'sleep 3; swaymsg workspace 1'
 
 include /etc/sway/config.d/*
