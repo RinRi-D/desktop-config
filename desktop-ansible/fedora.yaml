@@ -50,6 +50,11 @@
       - easyeffects
       - gcc
       - gcc-c++
+      - gnome-keyring
+      - libsecret
+      - seahorse
+      - code
+      - flatpak
 
   tasks:
     - name: Get Fedora release number
@@ -84,9 +89,26 @@
       ansible.builtin.command: dnf config-manager setopt fedora-cisco-openh264.enabled=1
       changed_when: false
 
+    - name: Import Microsoft GPG key for VS Code
+      ansible.builtin.rpm_key:
+        key: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+
+    - name: Add Microsoft VS Code repository
+      ansible.builtin.copy:
+        dest: /etc/yum.repos.d/vscode.repo
+        mode: "0644"
+        content: |
+          [code]
+          name=Visual Studio Code
+          baseurl=https://packages.microsoft.com/yumrepos/vscode
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+
     - name: Refresh DNF metadata
-      ansible.builtin.command: dnf makecache
-      changed_when: false
+      ansible.builtin.dnf:
+        update_cache: true
 
     - name: Update all installed packages
       ansible.builtin.dnf:
@@ -97,11 +119,6 @@
     - name: Install Fedora packages
       ansible.builtin.dnf:
         name: "{{ workstation_packages }}"
-        state: present
-
-    - name: Ensure Flatpak is installed
-      ansible.builtin.dnf:
-        name: flatpak
         state: present
 
     - name: Add Flathub remote
