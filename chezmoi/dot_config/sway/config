@@ -50,7 +50,7 @@ assign [app_id="telegram"] workspace 5
 #
 exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
-         timeout 300 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         timeout 200 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
          before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, turn off your screen, and turn your screens back on when
@@ -68,6 +68,8 @@ exec swayidle -w \
 
     # Start your launcher
     bindsym $mod+d exec $menu
+
+    bindsym $mod+Shift+p exec 'swaylock -f -c 000000'
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.

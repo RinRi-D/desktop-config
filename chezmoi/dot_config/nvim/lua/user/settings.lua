@@ -30,6 +30,8 @@ vim.opt.termguicolors = true
 
 vim.opt.showmode = false
 
+vim.keymap.set("n", "<leader>r", ":set relativenumber!<CR>", { desc = "Toggle relative line numbers" })
+
 local dap = require("dap")
 
 vim.keymap.set("n", "<F5>", function()

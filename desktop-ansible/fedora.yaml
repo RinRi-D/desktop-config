@@ -55,6 +55,8 @@
       - seahorse
       - code
       - flatpak
+      - qbittorrent
+      - mpv
 
   tasks:
     - name: Get Fedora release number
