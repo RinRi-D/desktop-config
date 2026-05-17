@@ -24,36 +24,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
-vim.opt.smartcase =true
+vim.opt.smartcase = true
 
 vim.opt.termguicolors = true
-
 vim.opt.showmode = false
-
-vim.keymap.set("n", "<leader>r", ":set relativenumber!<CR>", { desc = "Toggle relative line numbers" })
-
-local dap = require("dap")
-
-vim.keymap.set("n", "<F5>", function()
-  dap.continue()
-end, { desc = "DAP Continue" })
-
-vim.keymap.set("n", "<F10>", function()
-  dap.step_over()
-end, { desc = "DAP Step Over" })
-
-vim.keymap.set("n", "<F11>", function()
-  dap.step_into()
-end, { desc = "DAP Step Into" })
-
-vim.keymap.set("n", "<F12>", function()
-  dap.step_out()
-end, { desc = "DAP Step Out" })
-
-vim.keymap.set("n", "<leader>db", function()
-  dap.toggle_breakpoint()
-end, { desc = "DAP Toggle Breakpoint" })
-
-vim.keymap.set("n", "<leader>dr", function()
-  dap.repl.open()
-end, { desc = "DAP REPL" })

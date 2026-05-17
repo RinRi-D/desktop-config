@@ -27,6 +27,13 @@ output $mainmonitor resolution 2560x1440 position 1920,0 scale 1.2
 output $secondmonitor resolution 1920x1080 position 0,0
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
+### Input config
+input "type:pointer" {
+  accel_profile "flat"
+  pointer_accel -0.5
+}
+# swaymsg -t get_inputs
+
 # Beh
 default_border pixel 1
 
