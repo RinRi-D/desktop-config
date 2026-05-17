@@ -15,13 +15,14 @@ function M.setup()
       ensure_installed = {
         "gopls",
         "delve",
+        "clangd",
       },
     })
   end
 
   if ok_mlsp then
     mlsp.setup({
-      ensure_installed = { "gopls" },
+      ensure_installed = { "gopls", "clangd" },
     })
   end
 
@@ -46,6 +47,11 @@ function M.setup()
     },
   })
 
+  vim.lsp.config("clangd", {
+    capabilities = capabilities,
+  })
+
+  vim.lsp.enable("clangd")
   vim.lsp.enable("gopls")
 
   vim.api.nvim_create_autocmd("LspAttach", {
@@ -55,6 +61,7 @@ function M.setup()
       vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
       vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
       vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+      vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
       vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
     end,
