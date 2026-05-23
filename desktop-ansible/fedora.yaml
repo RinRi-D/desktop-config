@@ -57,6 +57,7 @@
       - flatpak
       - qbittorrent
       - mpv
+      - ripgrep
 
   tasks:
     - name: Get Fedora release number
