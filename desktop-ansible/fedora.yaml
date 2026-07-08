@@ -15,11 +15,13 @@
       - golang
       - zsh
       - docker-cli
+      - docker-compose
       - sway
       - swaybg
       - waybar
       - wofi
       - foot
+      - btop
       - xdg-desktop-portal
       - xdg-desktop-portal-wlr
       - xdg-desktop-portal-gtk
@@ -58,6 +60,10 @@
       - qbittorrent
       - mpv
       - ripgrep
+      - x265
+      - x265-libs
+      - mesa-va-drivers-freeworld
+      - libavcodec-freeworld
 
   tasks:
     - name: Get Fedora release number
@@ -124,6 +130,12 @@
         name: "{{ workstation_packages }}"
         state: present
 
+    - name: Replace ffmpeg-free with full ffmpeg cleanly
+      ansible.builtin.dnf:
+        name: ffmpeg
+        state: latest
+        allowerasing: true
+
     - name: Add Flathub remote
       ansible.builtin.command: >
         flatpak remote-add --if-not-exists flathub
@@ -149,6 +161,13 @@
     - name: Install Discord from Flathub
       ansible.builtin.command: flatpak install -y flathub dev.vencord.Vesktop
       when: discord_flatpak.rc != 0
+
+    - name: Install opencode npm
+      community.general.npm:
+        name: opencode-ai
+        version: 1.17.3
+        global: true
+        state: present
 
     - name: Create font directory for the primary user
       ansible.builtin.file:
@@ -213,3 +232,8 @@
       ansible.builtin.user:
         name: "{{ primary_user }}"
         shell: "{{ zsh_path.stdout }}"
+    - name: Set primary user's groups
+      ansible.builtin.user:
+        name: "{{ primary_user }}"
+        groups: docker,wheel,render
+        append: yes
